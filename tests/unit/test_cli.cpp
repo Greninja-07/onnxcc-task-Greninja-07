@@ -77,9 +77,44 @@ TEST(CLIContractTest, DumpHelpListingThreeOptions) {
     EXPECT_NE(help_output.find("verbose"), std::string::npos);
 }
 
+// Row 4 short form: onnxcc dump -h -> Prints usage for dump; exit 0
+TEST(CLIContractTest, DumpShortHelpListingThreeOptions) {
+    const char* argv[] = {"onnxcc", "dump", "-h"};
+    int argc = 3;
+    std::ostringstream out;
+    std::ostringstream err;
+
+    int exit_code = onnxcc::cli::execute(argc, argv, out, err);
+
+    EXPECT_EQ(exit_code, 0);
+    EXPECT_TRUE(err.str().empty());
+
+    std::string help_output = out.str();
+    EXPECT_NE(help_output.find("model"), std::string::npos);
+    EXPECT_NE(help_output.find("show-graph"), std::string::npos);
+    EXPECT_NE(help_output.find("verbose"), std::string::npos);
+}
+
 // Row 5: onnxcc --help -> Prints top-level usage listing the available subcommands; exit 0
 TEST(CLIContractTest, TopLevelHelpListingSubcommands) {
     const char* argv[] = {"onnxcc", "--help"};
+    int argc = 2;
+    std::ostringstream out;
+    std::ostringstream err;
+
+    int exit_code = onnxcc::cli::execute(argc, argv, out, err);
+
+    EXPECT_EQ(exit_code, 0);
+    EXPECT_TRUE(err.str().empty());
+
+    std::string help_output = out.str();
+    EXPECT_NE(help_output.find("Available subcommands:"), std::string::npos);
+    EXPECT_NE(help_output.find("dump"), std::string::npos);
+}
+
+// Row 5 short form: onnxcc -h -> Prints top-level usage; exit 0
+TEST(CLIContractTest, TopLevelShortHelpListingSubcommands) {
+    const char* argv[] = {"onnxcc", "-h"};
     int argc = 2;
     std::ostringstream out;
     std::ostringstream err;
